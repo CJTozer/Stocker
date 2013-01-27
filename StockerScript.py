@@ -1,4 +1,4 @@
-from Stocker.Trader import Trader
+from Trader import Trader
 
 def main():
     t = Trader()

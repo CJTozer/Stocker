@@ -1,5 +1,5 @@
-from Stocker.Data import *
-from Stocker.Getter.GoogleGetter import GoogleGetter
+from Data import FTSE_100   
+from Getter.GoogleGetter import GoogleGetter
 import shelve, datetime
 
 class Trader:
