@@ -10,7 +10,9 @@ class GoogleGetter:
     def get_stock(self, symbol):
         url = self.base_url + symbol
         print url
-        lines = requests.get(url).text.splitlines()
+        r = requests.get(url)
+        print r
+        lines = r.text.splitlines()
         print lines
         json_data = json.loads(''.join([x for x in lines if x not in ('// [', ']')]))
         return float(json_data["l"].replace(",", ""))
