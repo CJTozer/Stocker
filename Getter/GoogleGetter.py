@@ -3,7 +3,7 @@ import urllib2, json, logging
 class GoogleGetter:
     
     def __init__(self):
-        self.base_url = 'http://finance.google.com/finance/info?q='
+        self.base_url = 'http://www.google.co.uk/finance/info?q='
         self.logger = logging.getLogger("GoogleGetter")
     
     def get_stock_value(self, symbol):
