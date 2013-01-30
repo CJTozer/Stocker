@@ -115,11 +115,28 @@ class StockData:
         self.history[date] = value
         self.last_value = value
         
-    def get_historical_value(self, days_ago):
+    def get_historical_value(self, days_ago, start_date=datetime.date.today()):
         """ Get the stock value from a number of days ago """
-        # @@@ Ignore weekends
         value = -1.0
-        key = datetime.date.today() - datetime.timedelta(days=days_ago)
+        
+        # Decrement the date until we've gone back far enough - but ignore weekends
+        key = start_date
+        days_to_go = days_ago
+        
+        # Make sure the start day is the last weekday
+        while key.weekday() > 4:
+            key = key - datetime.timedelta(days=1)
+            
+        # Decrement until we've gone back far enough
+        while days_to_go > 0:
+            key = key - datetime.timedelta(days=1)
+            days_to_go = days_to_go - 1
+            
+            # Decrement weekends to get the previous Friday
+            while key.weekday() > 4:
+                key = key - datetime.timedelta(days=1)        
+        
+        # Get the value if we have one
         if self.history.has_key(key):
             value = self.history[key]
         return value

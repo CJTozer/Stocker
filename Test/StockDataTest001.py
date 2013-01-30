@@ -65,7 +65,56 @@ class StockDataTest001(unittest.TestCase):
         self.assertEqual(stock_data.holding, 2)
         self.assertEqual(stock_data.transactions, ts)
         self.assertEqual(stock_data.sorted_holdings_value(), 5.6)
+    
+    def test_get_historical_value(self):
+        """ Test that we ignore weekends for historical values """
+        # date[0] is a Tuesday, so date[4] and date[5] are weekends
+        stock_data = StockData()
+        dates = map(lambda x: datetime.date(2013, 1, x), range(1, 10))
+        for ii in range(9):
+            stock_data.add_history_value(ii, dates[ii])
         
+        # First dates back from 8
+        self.assertEquals(stock_data.get_historical_value(0, start_date=dates[8]), 8)
+        self.assertEquals(stock_data.get_historical_value(1, start_date=dates[8]), 7)
+        self.assertEquals(stock_data.get_historical_value(2, start_date=dates[8]), 6)
+        self.assertEquals(stock_data.get_historical_value(3, start_date=dates[8]), 3)
+        self.assertEquals(stock_data.get_historical_value(4, start_date=dates[8]), 2)
+        self.assertEquals(stock_data.get_historical_value(5, start_date=dates[8]), 1)
+        self.assertEquals(stock_data.get_historical_value(6, start_date=dates[8]), 0)
+        self.assertEquals(stock_data.get_historical_value(7, start_date=dates[8]), -1)
+        
+        # Then back from 7
+        self.assertEquals(stock_data.get_historical_value(0, start_date=dates[7]), 7)
+        self.assertEquals(stock_data.get_historical_value(1, start_date=dates[7]), 6)
+        self.assertEquals(stock_data.get_historical_value(2, start_date=dates[7]), 3)
+        self.assertEquals(stock_data.get_historical_value(3, start_date=dates[7]), 2)
+        self.assertEquals(stock_data.get_historical_value(4, start_date=dates[7]), 1)
+        self.assertEquals(stock_data.get_historical_value(5, start_date=dates[7]), 0)
+        self.assertEquals(stock_data.get_historical_value(6, start_date=dates[7]), -1)
+        
+        # From 6
+        self.assertEquals(stock_data.get_historical_value(0, start_date=dates[6]), 6)
+        self.assertEquals(stock_data.get_historical_value(1, start_date=dates[6]), 3)
+        self.assertEquals(stock_data.get_historical_value(2, start_date=dates[6]), 2)
+        self.assertEquals(stock_data.get_historical_value(3, start_date=dates[6]), 1)
+        self.assertEquals(stock_data.get_historical_value(4, start_date=dates[6]), 0)
+        self.assertEquals(stock_data.get_historical_value(5, start_date=dates[6]), -1)
+        
+        # From 5 - getting there...
+        self.assertEquals(stock_data.get_historical_value(0, start_date=dates[5]), 3)
+        self.assertEquals(stock_data.get_historical_value(1, start_date=dates[5]), 2)
+        self.assertEquals(stock_data.get_historical_value(2, start_date=dates[5]), 1)
+        self.assertEquals(stock_data.get_historical_value(3, start_date=dates[5]), 0)
+        self.assertEquals(stock_data.get_historical_value(4, start_date=dates[5]), -1)
+        
+        # From 4 - last one
+        self.assertEquals(stock_data.get_historical_value(0, start_date=dates[4]), 3)
+        self.assertEquals(stock_data.get_historical_value(1, start_date=dates[4]), 2)
+        self.assertEquals(stock_data.get_historical_value(2, start_date=dates[4]), 1)
+        self.assertEquals(stock_data.get_historical_value(3, start_date=dates[4]), 0)
+        self.assertEquals(stock_data.get_historical_value(4, start_date=dates[4]), -1)
+    
     ##
     ## Utilities
     ##
