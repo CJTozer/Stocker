@@ -82,10 +82,15 @@ class Trader:
         ret_str = "Cash: \x9c%.2f\n" % self.cash
         ret_str += "Stocks: \x9c%.2f\n" % self.total_stock_value()
         ret_str += "\n"
+        all_transactions = []
         for stock in self.stocks:
             stock_data = self.get_stock_data(stock)
+            all_transactions.extend(map(lambda x: (stock, x), stock_data.transactions))
             if stock_data.holding > 0:
                 ret_str += "%-6s: %5d : \x9c%.2f\n" % (stock, stock_data.holding, stock_data.last_value * stock_data.holding)
+        ret_str += "\n"
+        for (s, t) in sorted(all_transactions, key=lambda x: x[1].date):
+            ret_str += "%-4s: %s\n" % (s, t)
         return ret_str
 
 
@@ -112,6 +117,7 @@ class StockData:
         
     def get_historical_value(self, days_ago):
         """ Get the stock value from a number of days ago """
+        # @@@ Ignore weekends
         value = -1.0
         key = datetime.date.today() - datetime.timedelta(days=days_ago)
         if self.history.has_key(key):

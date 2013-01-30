@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(format='%(asctime)s\t%(levelname)s:\t%(name)-16s%(message)s',
                     filename='Stocker.log',
                     filemode = 'w',
-                    level=logging.INFO)
+                    level=logging.DEBUG)
 logger = logging.getLogger("StockerScript")
 
 ##
@@ -22,12 +22,13 @@ rules = [Rule(rule_criterion_stock_change(3, 0.005),
               description="Sell 75% if value has fallen by 15%")]
 
 def main():
-    # Simple rules - if value goes up by 0.5% 3 days in a row, buy with 5% of remaining cash...
     logger.info("Starting up")  
     t = Trader(rules=rules)
-    # t.update_all_stocks()
+    logger.info("Updating all stocks")
+    t.update_all_stocks()
+    logger.info("Running trader")
     t.run()
-    print "\n\n%s" % t
+    print "%s" % t
         
 
 # Script entry point
