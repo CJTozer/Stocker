@@ -3,12 +3,12 @@ import requests, json, logging
 class GoogleGetter:
     
     def __init__(self):
-        self.base_url = 'http://74.125.132.94/finance/info'
+        self.base_url = 'http://www.google.co.uk/finance/info'
         self.logger = logging.getLogger("GoogleGetter")
     
     def get_stock_value(self, symbol):
         self.logger.info("Retrieving stock %s from Google" % symbol)
-        r = requests.get(self.base_url, params={'q': symbol})
+        r = requests.get(self.base_url, params={'q': "LON:%s" % symbol})
         print r.headers
         self.logger.info(r.headers)
         r.raise_for_status()
