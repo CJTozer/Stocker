@@ -36,7 +36,8 @@ def main():
         t.reset()
     if args.update:
         logger.info("Updating all stocks")
-        t.update_all_stocks()
+        #t.update_all_stocks()
+        t.update_stock("GSK")
     if args.run:
         logger.info("Running trader")
         t.run()
