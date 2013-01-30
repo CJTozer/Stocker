@@ -1,6 +1,6 @@
 from Trader import Trader
 from Rules import * 
-import logging
+import logging, argparse
 
 logging.basicConfig(format='%(asctime)s\t%(levelname)s:\t%(name)-16s%(message)s',
                     filename='Stocker.log',
@@ -22,13 +22,22 @@ rules = [Rule(rule_criterion_stock_change(3, 0.005),
               description="Sell 75% if value has fallen by 15%")]
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-u", "--update", help="Update all stock values", action="store_true")
+    parser.add_argument("-r", "--run", help="Run the trader", action="store_true")
+    parser.add_argument("-s", "--show", help="Show the trader's current status", action="store_true")
+    args = parser.parse_args()
+    
     logger.info("Starting up")  
     t = Trader(rules=rules)
-    logger.info("Updating all stocks")
-    t.update_all_stocks()
-    logger.info("Running trader")
-    t.run()
-    print "%s" % t
+    if args.update:
+        logger.info("Updating all stocks")
+        t.update_all_stocks()
+    if args.run:
+        logger.info("Running trader")
+        t.run()
+    if args.show:
+        print "%s" % t
         
 
 # Script entry point
