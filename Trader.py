@@ -14,18 +14,20 @@ class Trader:
         if self.data.has_key('cash'):
             self.cash = self.data['cash']
         else:
-            self.cash = 1000.0
+            # Temp - from the first day's purchases not being saved...
+            self.cash = 923.88
         
     def run(self):
         """ Run a cycle of applying rules, and updating purchases. """
         for stock in self.stocks:
-            self.logger.info("Applying rules to %s" % stock)
+            self.logger.debug("Applying rules to %s" % stock)
             stock_data = self.get_stock_data(stock)
             for rule in self.rules:
                 self.logger.debug("Checking rule [%s]" % rule)
                 if rule.rule_applies(stock_data):
                     self.logger.info("Rule [%s] matched..." % rule)
                     rule_result = rule.get_result(stock_data, self.cash)
+                    self.logger.info("...Result: %s", rule_result)
                     self.cash -= stock_data.apply_transaction(rule_result)
                     self.save_stock_data(stock, stock_data)
         
@@ -72,6 +74,9 @@ class Trader:
         delattr(stock_data, "logger")
         self.data[stock] = stock_data
         stock_data.logger = temp_logger
+        
+        # Also save cash, as it's likely something has changed.
+        self.data['cash'] = self.cash
 
     def __str__(self):
         ret_str = "Cash: \x9c%.2f\n" % self.cash

@@ -1,8 +1,0 @@
-2013-01-29 23:26:57,105	INFO:	StockData       Applying transaction: [2013-01-29] 2 @ œ3.00
-2013-01-29 23:26:57,105	INFO:	StockData       Applying transaction: [2013-01-29] 5 @ œ2.50
-2013-01-29 23:26:57,107	INFO:	StockData       Applying transaction: [2013-01-29] -2 @ œ3.20
-2013-01-29 23:26:57,108	INFO:	StockData       Applying transaction: [2013-01-25] 4 @ œ2.50
-2013-01-29 23:26:57,108	INFO:	StockData       Applying transaction: [2013-01-26] -2 @ œ3.20
-2013-01-29 23:26:57,108	INFO:	StockData       Applying transaction: [2013-01-27] 1 @ œ3.00
-2013-01-29 23:26:57,108	INFO:	StockData       Applying transaction: [2013-01-28] 2 @ œ2.60
-2013-01-29 23:26:57,108	INFO:	StockData       Applying transaction: [2013-01-29] -3 @ œ2.90

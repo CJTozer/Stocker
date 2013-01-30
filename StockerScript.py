@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(format='%(asctime)s\t%(levelname)s:\t%(name)-16s%(message)s',
                     filename='Stocker.log',
                     filemode = 'w',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 logger = logging.getLogger("StockerScript")
 
 ##
