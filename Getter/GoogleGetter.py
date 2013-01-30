@@ -3,15 +3,13 @@ import urllib2, json, logging
 class GoogleGetter:
     
     def __init__(self):
-        self.base_url = 'http://www.google.co.uk/finance/info?q='
+        self.base_url = 'http://www.google.co.uk/finance/info'
         self.logger = logging.getLogger("GoogleGetter")
     
     def get_stock_value(self, symbol):
         self.logger.info("Retrieving stock %s from Google" % symbol)
         # Get the raw json text
-        url = self.base_url + symbol
-        self.logger.debug("Using URL %s", url)
-        lines = urllib2.urlopen(url).readlines()
+        lines = urllib2.urlopen(self.base_url, params={'q': symbol}).readlines()
         # Drop newline characters
         lines = map(lambda x: x.strip(), lines)
         # Remove unwanted lines and concatenate
