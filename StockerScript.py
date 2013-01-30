@@ -26,10 +26,14 @@ def main():
     parser.add_argument("-u", "--update", help="Update all stock values", action="store_true")
     parser.add_argument("-r", "--run", help="Run the trader", action="store_true")
     parser.add_argument("-s", "--show", help="Show the trader's current status", action="store_true")
+    parser.add_argument("--reset", help="Reset the trader's data", action="store_true")
     args = parser.parse_args()
     
     logger.info("Starting up")  
     t = Trader(rules=rules)
+    if args.reset:
+        logger.info("Resetting data")
+        t.reset()
     if args.update:
         logger.info("Updating all stocks")
         t.update_all_stocks()

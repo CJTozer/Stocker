@@ -14,9 +14,16 @@ class Trader:
         if self.data.has_key('cash'):
             self.cash = self.data['cash']
         else:
-            # Temp - from the first day's purchases not being saved...
-            self.cash = 923.88
-        
+            self.cash = 1000
+    
+    def reset(self):
+        """ Reset all the data (except for the useful stuff) """
+        self.cash = 1000
+        for stock in self.stocks:
+            stock_data = self.get_stock_data(stock)
+            stock_data.reset()
+            self.save_stock_data(stock, stock_data)
+    
     def run(self):
         """ Run a cycle of applying rules, and updating purchases. """
         for stock in self.stocks:
@@ -101,7 +108,12 @@ class StockData:
         self.history = {}
         self.transactions = []
         self.holding = 0
-        self.last_value = 0.0
+        self.last_value = 0.0        
+        
+    def reset(self):
+        """ Reset all data (except for the useful bits) """
+        self.transactions = []
+        self.holding = 0
 
     def apply_transaction(self, transaction):
         """ Record a transaction to buy/sell some of this stock """

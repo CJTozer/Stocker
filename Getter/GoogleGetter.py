@@ -1,4 +1,4 @@
-import requests, json, logging
+import urllib2, json, logging
 
 class GoogleGetter:
     
@@ -8,11 +8,15 @@ class GoogleGetter:
     
     def get_stock_value(self, symbol):
         self.logger.info("Retrieving stock %s from Google" % symbol)
-        r = requests.get(self.base_url + symbol)
-        r.raise_for_status()
-        lines = r.text.splitlines()
-        json_data = json.loads(''.join([x for x in lines if x not in ('// [', ']')]))
+        # Get the raw json text
+        lines = urllib2.urlopen(self.base_url + symbol).readlines()
+        # Drop newline characters
+        lines = map(lambda x: x.strip(), lines)
+        # Remove unwanted lines and concatenate
+        json_text = ''.join([x for x in lines if x not in ('// [', ']')])
+        # Load as json
+        json_data = json.loads(json_text)
+        # Get the latest ("l") value
         value = float(json_data["l"].replace(",", "")) / 100.0
         self.logger.debug("Got value %.4f" % value) 
         return value
-        
