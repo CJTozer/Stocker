@@ -81,4 +81,4 @@ class Transaction:
         return self.price * self.quantity
     
     def __str__(self):
-        return "[%s] %d @ \x9c%.2f" % (self.date, self.quantity, self.price)
+        return "[%s] %d @ \xa3%.2f" % (self.date, self.quantity, self.price)
