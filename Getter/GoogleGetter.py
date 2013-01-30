@@ -9,7 +9,9 @@ class GoogleGetter:
     def get_stock_value(self, symbol):
         self.logger.info("Retrieving stock %s from Google" % symbol)
         # Get the raw json text
-        lines = urllib2.urlopen(self.base_url + symbol).readlines()
+        url = self.base_url + symbol
+        self.logger.debug("Using URL %s", url)
+        lines = urllib2.urlopen(url).readlines()
         # Drop newline characters
         lines = map(lambda x: x.strip(), lines)
         # Remove unwanted lines and concatenate
