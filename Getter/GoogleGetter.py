@@ -9,8 +9,6 @@ class GoogleGetter:
     def get_stock_value(self, symbol):
         self.logger.info("Retrieving stock %s from Google" % symbol)
         r = requests.get(self.base_url, params={'q': "LON:%s" % symbol})
-        print r.headers
-        self.logger.info(r.headers)
         r.raise_for_status()
         lines = r.text.splitlines()
         json_data = json.loads(''.join([x for x in lines if x not in ('// [', ']')]))
