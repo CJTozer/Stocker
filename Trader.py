@@ -9,7 +9,7 @@ class Trader:
         self.name = name
         self.rules = rules
         self.stocks = map(lambda x: x[0], FTSE_100)
-        self.data = shelve.open("stocker_data_" + name)
+        self.data = shelve.open("trader_data_" + name)
         self.getter = GoogleGetter()
         if self.data.has_key('cash'):
             self.cash = self.data['cash']
@@ -86,7 +86,8 @@ class Trader:
         self.data['cash'] = self.cash
 
     def __str__(self):
-        ret_str = "Cash: \xa3%.2f\n" % self.cash
+        ret_str = "Trader: %s\n\n" % self.name
+        ret_str += "Cash: \xa3%.2f\n" % self.cash
         ret_str += "Stocks: \xa3%.2f\n" % self.total_stock_value()
         ret_str += "\n"
         all_transactions = []

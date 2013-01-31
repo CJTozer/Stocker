@@ -14,7 +14,7 @@ class Rule:
 ##
 ## Rule criteria
 ##
-def rule_criterion_stock_change(days, amount):
+def rule_criterion_stock_change_days_in_a_row(days, amount):
     """ Criterion matches if stock has increased by a given amount for a certain number of days in a row. """
     def result(stock_data):
         meets_criterion = True
@@ -34,8 +34,18 @@ def rule_criterion_stock_change(days, amount):
         return meets_criterion
     return result
 
-def rule_criterion_overall_change(amount):
-    """ Criterion matches if the stock value has changed by the given proportion since it was bought. """
+def rule_criterion_stock_change_overall(days, amount):
+    """ Criterion matches if stock has increased by a given amount since a certain number of days ago. """
+    def result(stock_data):
+        this_val = stock_data.get_historical_value(0)
+        prev_val = stock_data.get_historical_value(days)
+        ratio = (this_val / prev_val) - 1
+        logger.debug("Increase [t/t-%d] is %.4f" % (days, ratio))
+        return (ratio / amount) >= 1.0
+    return result
+
+def rule_criterion_overall_holding_change(amount):
+    """ Criterion matches if the held stock value has changed by the given proportion since it was bought. """
     def result(stock_data):
         # Work out the total (overall) cost
         if stock_data.holding == 0:
