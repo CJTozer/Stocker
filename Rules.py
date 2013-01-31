@@ -12,6 +12,25 @@ class Rule:
         return self.description
 
 ##
+## Rule utlities
+##
+def combine_criteria_all_apply(criteria):
+    def result(stock_data):
+        for criterion in criteria:
+            if not criterion(stock_data):
+                return False
+        return True
+    return result
+
+def combine_criteria_any_apply(criteria):
+    def result(stock_data):
+        for criterion in criteria:
+            if criterion(stock_data):
+                return True
+        return False
+    return result
+
+##
 ## Rule criteria
 ##
 def rule_criterion_stock_change_days_in_a_row(days, amount):
