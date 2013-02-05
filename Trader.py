@@ -84,14 +84,28 @@ class Trader:
         
         # Also save cash, as it's likely something has changed.
         self.data['cash'] = self.cash
+        
+    def expected_return(self):
+        """ Calculate the expected return based on the stocks' increase in value """
+        # Map stock names to a list of returns
+        returns = []
+        for stock in self.stocks:
+            stock_data = self.get_stock_data(stock)
+            initial_value = stock_data.initial_value()
+            returns.append(100 * (stock_data.last_value - initial_value) / initial_value)
+        return sum(returns) / len(returns)
 
     def __str__(self):
         stock_value = self.total_stock_value()
         ret_str = "Trader: %s\n\n" % self.name
-        ret_str += "Total value: \xa3%.2f\n\n" % (self.cash + stock_value)
-        ret_str += "Cash: \xa3%.2f\n" % self.cash
+        total_value = self.cash + stock_value
+        ret_str += "Total value: \xa3%.2f\n\n" % total_value
+        ret_str += "Cash:   \xa3%.2f\n" % self.cash
         ret_str += "Stocks: \xa3%.2f\n" % stock_value
         ret_str += "\n"
+        ret_str += "Return:          %4.2f%%\n" % (100 * (total_value - 1000) / 1000)
+        ret_str += "Expected Return: %4.2f%%\n" % self.expected_return()
+        ret_str += "\n"        
         all_transactions = []
         for stock in self.stocks:
             stock_data = self.get_stock_data(stock)
@@ -175,3 +189,7 @@ class StockData:
     def sorted_holdings_value(self):
         """ Get a representation of the 'original' price of these holdings, using the sorted_holdings method. """
         return sum(self.sorted_holdings())
+    
+    def initial_value(self):
+        """ Get the first price of the stock """
+        return self.history[sorted(self.history)[0]]
