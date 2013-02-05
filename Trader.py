@@ -86,16 +86,21 @@ class Trader:
         self.data['cash'] = self.cash
 
     def __str__(self):
+        stock_value = self.total_stock_value()
         ret_str = "Trader: %s\n\n" % self.name
+        ret_str += "Total value: \xa3%.2f\n\n" % (self.cash + stock_value)
         ret_str += "Cash: \xa3%.2f\n" % self.cash
-        ret_str += "Stocks: \xa3%.2f\n" % self.total_stock_value()
+        ret_str += "Stocks: \xa3%.2f\n" % stock_value
         ret_str += "\n"
         all_transactions = []
         for stock in self.stocks:
             stock_data = self.get_stock_data(stock)
             all_transactions.extend(map(lambda x: (stock, x), stock_data.transactions))
             if stock_data.holding > 0:
-                ret_str += "%-6s: %5d : \xa3%.2f\n" % (stock, stock_data.holding, stock_data.last_value * stock_data.holding)
+                orig_value = stock_data.sorted_holdings_value()
+                stock_value = stock_data.last_value * stock_data.holding
+                pct_increase = 100 * (stock_value - orig_value) / orig_value
+                ret_str += "%-6s: %4d : \xa3%7.2f  (%.2f%%)\n" % (stock, stock_data.holding, stock_value, pct_increase)
         ret_str += "\n"
         for (s, t) in sorted(all_transactions, key=lambda x: x[1].date):
             ret_str += "%-4s: %s\n" % (s, t)
